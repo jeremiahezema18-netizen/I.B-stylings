@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>I.B Stylings - Add Service</title>
+  <title id="pageTitle">I.B Stylings - Add Service</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="supabase.js"></script>
+  <script src="../supabase.js"></script>
 </head>
 <body class="bg-gray-100">
   <div class="flex">
@@ -25,8 +25,8 @@
     </div>
 
     <div class="ml-64 flex-1 p-10">
-      <h2 class="text-4xl font-bold">Add New Service</h2>
-      <p class="text-gray-600 mt-2">Create a new hair, lash, or nail styling service.</p>
+      <h2 id="formHeading" class="text-4xl font-bold">Add New Service</h2>
+      <p id="formSubheading" class="text-gray-600 mt-2">Create a new hair, lash, or nail styling service.</p>
 
       <div class="bg-white rounded-xl shadow-lg mt-10 p-8 max-w-2xl">
         <form id="serviceForm" class="space-y-6">
@@ -50,7 +50,17 @@
             <input type="number" id="servicePrice" required placeholder="e.g., 15000" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400">
           </div>
 
-          <button type="submit" class="w-full bg-yellow-400 text-black font-bold py-3 rounded-lg hover:bg-yellow-500 transition">
+          <div id="currentImageContainer" class="hidden">
+            <label class="block text-gray-700 font-semibold mb-2">Current Image</label>
+            <img id="imagePreview" src="" alt="Service Preview" class="w-32 h-32 object-cover rounded-lg border mb-2">
+          </div>
+
+          <div>
+            <label id="imageLabel" class="block text-gray-700 font-semibold mb-2">Service Image</label>
+            <input type="file" id="serviceImage" accept="image/*" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400">
+          </div>
+
+          <button type="submit" id="submitBtn" class="w-full bg-yellow-400 text-black font-bold py-3 rounded-lg hover:bg-yellow-500 transition">
             Save Service
           </button>
         </form>
@@ -59,41 +69,125 @@
   </div>
 
   <script>
+    // 1. Get the Service ID from URL (e.g. add-service.html?id=xxxxx)
+    const urlParams = new URLSearchParams(window.location.search);
+    const serviceId = urlParams.get('id');
+    const isEditMode = !!serviceId; // true if ID exists, false if adding new
+
+    let existingImageUrl = null;
+
     async function checkAuth() {
-      const { data: { session } } = await supabase.auth.getSession();
+      const { data: { session } } = await supabaseClient.auth.getSession();
       if (!session) {
         window.location.href = "index.html";
       }
     }
 
+    // 2. Setup Page on Load
+    async function initPage() {
+      await checkAuth();
+
+      if (isEditMode) {
+        // Change text to reflect Edit Mode
+        document.getElementById('pageTitle').textContent = "I.B Stylings - Edit Service";
+        document.getElementById('formHeading').textContent = "Edit Service";
+        document.getElementById('formSubheading').textContent = "Modify the details of your service.";
+        document.getElementById('imageLabel').textContent = "Upload New Image (Replaces old one)";
+        document.getElementById('submitBtn').textContent = "Update Service";
+
+        // Load existing details
+        try {
+          const { data: service, error } = await supabaseClient
+            .from('services')
+            .select('*')
+            .eq('id', serviceId)
+            .single();
+
+          if (error) throw error;
+
+          document.getElementById('serviceName').value = service.name;
+          document.getElementById('serviceCategory').value = service.category;
+          document.getElementById('servicePrice').value = service.price;
+
+          if (service.image_url) {
+            existingImageUrl = service.image_url;
+            const imgPreview = document.getElementById('imagePreview');
+            imgPreview.src = service.image_url;
+            document.getElementById('currentImageContainer').classList.remove('hidden');
+          }
+        } catch (err) {
+          alert("Error loading service details: " + err.message);
+          window.location.href = "services.html";
+        }
+      }
+    }
+
+    // 3. Handle Form Submission (Add or Update)
     document.getElementById('serviceForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       
+      const submitBtn = document.getElementById('submitBtn');
+      submitBtn.disabled = true;
+      submitBtn.textContent = isEditMode ? "Updating..." : "Saving...";
+
       const name = document.getElementById('serviceName').value;
       const category = document.getElementById('serviceCategory').value;
       const price = parseFloat(document.getElementById('servicePrice').value);
+      const imageFile = document.getElementById('serviceImage').files[0];
+
+      let imageUrl = existingImageUrl;
 
       try {
-        const { error } = await supabase
-          .from('services')
-          .insert([{ name, category, price }]);
+        // Upload new image if selected
+        if (imageFile) {
+          const fileExt = imageFile.name.split('.').pop();
+          const fileName = `${Date.now()}.${fileExt}`;
+          const filePath = `services/${fileName}`;
 
-        if (error) throw error;
+          const { error: uploadError } = await supabaseClient.storage
+            .from('service-images') // Make sure this bucket is created in Supabase Storage and set to Public
+            .upload(filePath, imageFile);
 
-        alert("Service added successfully!");
-        document.getElementById('serviceForm').reset();
+          if (uploadError) throw uploadError;
+
+          const { data } = supabaseClient.storage.from('service-images').getPublicUrl(filePath);
+          imageUrl = data.publicUrl;
+        }
+
+        if (isEditMode) {
+          // UPDATE Existing Service
+          const { error } = await supabaseClient
+            .from('services')
+            .update({ name, category, price, image_url: imageUrl })
+            .eq('id', serviceId);
+
+          if (error) throw error;
+          alert("Service updated successfully!");
+        } else {
+          // INSERT New Service
+          const { error } = await supabaseClient
+            .from('services')
+            .insert([{ name, category, price, image_url: imageUrl }]);
+
+          if (error) throw error;
+          alert("Service added successfully!");
+        }
+
         window.location.href = "services.html";
       } catch (err) {
         alert("Error saving service: " + err.message);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = isEditMode ? "Update Service" : "Save Service";
       }
     });
 
     async function logout() {
-      await supabase.auth.signOut();
+      await supabaseClient.auth.signOut();
       window.location.href = "index.html";
     }
 
-    document.addEventListener("DOMContentLoaded", checkAuth);
+    document.addEventListener("DOMContentLoaded", initPage);
   </script>
 </body>
 </html>
