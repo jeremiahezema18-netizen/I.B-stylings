@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title id="pageTitle">I.B Stylings - Add Service</title>
+  <title id="pageTitle">I.B Stylings - Service Management</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="../supabase.js"></script>
@@ -69,35 +69,38 @@
   </div>
 
   <script>
-    // 1. Get the Service ID from URL (e.g. add-service.html?id=xxxxx)
+    // Safe Client Initialization right on the page itself
+    const dbUrl = window.SUPABASE_URL || "https://eravuxirymuooojyngjz.supabase.co";
+    const dbKey = window.SUPABASE_KEY || "sb_publishable_ZRFXaRtBDsXe9WY4iDDfUg_erIKsJDq";
+    
+    // Using supabase.createClient cleanly
+    const localClient = supabase.createClient(dbUrl, dbKey);
+
     const urlParams = new URLSearchParams(window.location.search);
     const serviceId = urlParams.get('id');
-    const isEditMode = !!serviceId; // true if ID exists, false if adding new
+    const isEditMode = !!serviceId;
 
     let existingImageUrl = null;
 
     async function checkAuth() {
-      const { data: { session } } = await supabaseClient.auth.getSession();
+      const { data: { session } } = await localClient.auth.getSession();
       if (!session) {
         window.location.href = "index.html";
       }
     }
 
-    // 2. Setup Page on Load
     async function initPage() {
       await checkAuth();
 
       if (isEditMode) {
-        // Change text to reflect Edit Mode
         document.getElementById('pageTitle').textContent = "I.B Stylings - Edit Service";
         document.getElementById('formHeading').textContent = "Edit Service";
         document.getElementById('formSubheading').textContent = "Modify the details of your service.";
         document.getElementById('imageLabel').textContent = "Upload New Image (Replaces old one)";
         document.getElementById('submitBtn').textContent = "Update Service";
 
-        // Load existing details
         try {
-          const { data: service, error } = await supabaseClient
+          const { data: service, error } = await localClient
             .from('services')
             .select('*')
             .eq('id', serviceId)
@@ -122,7 +125,6 @@
       }
     }
 
-    // 3. Handle Form Submission (Add or Update)
     document.getElementById('serviceForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       
@@ -138,25 +140,23 @@
       let imageUrl = existingImageUrl;
 
       try {
-        // Upload new image if selected
         if (imageFile) {
           const fileExt = imageFile.name.split('.').pop();
           const fileName = `${Date.now()}.${fileExt}`;
           const filePath = `services/${fileName}`;
 
-          const { error: uploadError } = await supabaseClient.storage
-            .from('service-images') // Make sure this bucket is created in Supabase Storage and set to Public
+          const { error: uploadError } = await localClient.storage
+            .from('service-images')
             .upload(filePath, imageFile);
 
           if (uploadError) throw uploadError;
 
-          const { data } = supabaseClient.storage.from('service-images').getPublicUrl(filePath);
+          const { data } = localClient.storage.from('service-images').getPublicUrl(filePath);
           imageUrl = data.publicUrl;
         }
 
         if (isEditMode) {
-          // UPDATE Existing Service
-          const { error } = await supabaseClient
+          const { error } = await localClient
             .from('services')
             .update({ name, category, price, image_url: imageUrl })
             .eq('id', serviceId);
@@ -164,8 +164,7 @@
           if (error) throw error;
           alert("Service updated successfully!");
         } else {
-          // INSERT New Service
-          const { error } = await supabaseClient
+          const { error } = await localClient
             .from('services')
             .insert([{ name, category, price, image_url: imageUrl }]);
 
@@ -183,7 +182,7 @@
     });
 
     async function logout() {
-      await supabaseClient.auth.signOut();
+      await localClient.auth.signOut();
       window.location.href = "index.html";
     }
 
