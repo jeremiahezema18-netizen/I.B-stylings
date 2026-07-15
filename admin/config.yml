@@ -3,6 +3,7 @@ backend:
   repo: jeremiahezema18-netizen/I.B-stylings
   branch: main
 
+
 media_folder: "images/uploads"
 public_folder: "/images/uploads"
 
