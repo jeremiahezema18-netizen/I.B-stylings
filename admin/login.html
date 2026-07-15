@@ -90,6 +90,10 @@ async function login() {
 
     alert("Trying to log in...");
 
+alert(typeof window.supabase);
+
+alert(typeof window.supabaseClient);
+
     try {
 
     const { data, error } = await window.supabaseClient.auth.signInWithPassword({
