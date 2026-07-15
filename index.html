@@ -1,48 +1,165 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    </head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I.B STYLINGS | Luxury Unisex Hair, Nails, Lashes & Ink</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@300;400;600&family=Playfair+Display:ital,wght@1,400;1,600&display=swap" rel="stylesheet">
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #0a0a0a;
+            color: #ffffff;
+        }
+        .font-luxury {
+            font-family: 'Cinzel', serif;
+        }
+        .font-script {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+        }
+        .text-gold {
+            color: #d4af37;
+        }
+        .border-gold {
+            border-color: #d4af37;
+        }
+        .gold-gradient {
+            background: linear-gradient(135deg, #b38728, #daaf38, #aa771c);
+        }
+        .gold-btn {
+            background: linear-gradient(135deg, #b38728, #daaf38, #aa771c);
+            transition: all 0.3s ease;
+        }
+        .gold-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(218, 175, 56, 0.4);
+        }
+    </style>
+</head>
 <body>
 
-    <header id="hero-section" class="relative min-h-screen flex items-center justify-center bg-black overflow-hidden">
-        <div id="hero-bg" class="absolute inset-0 opacity-40 bg-cover bg-center transition-all duration-1000" 
-             style="background-image: url('https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&q=80&w=1600')"></div>
+    <header class="relative min-h-screen flex items-center justify-center bg-black overflow-hidden">
+        <div class="absolute inset-0 opacity-40 bg-[url('https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&q=80&w=1600')] bg-cover bg-center"></div>
         <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-black"></div>
-        </header>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        <div class="relative z-10 text-center px-4 max-w-4xl">
+            <span class="text-gold font-luxury tracking-[0.3em] text-sm uppercase block mb-3">Welcome to Luxury</span>
+            <h1 class="text-5xl md:text-7xl lg:text-8xl font-luxury font-bold tracking-widest text-white mb-6">I.B STYLINGS</h1>
+            <p class="text-stone-300 max-w-xl mx-auto text-sm md:text-base leading-relaxed tracking-wider mb-8">
+                A premium unisex experience offering master-level hairstyling, exquisite nail artistry, flawless lash extensions, and custom body ink.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <a href="#services" class="gold-btn text-black font-bold uppercase tracking-widest text-xs px-8 py-4 w-full sm:w-auto">
+                    Explore Services
+                </a>
+                <a href="#booking" class="border border-gold text-gold hover:bg-gold hover:text-black transition duration-300 font-bold uppercase tracking-widest text-xs px-8 py-4 w-full sm:w-auto">
+                    Book Appointment
+                </a>
+            </div>
+        </div>
+    </header>
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyB6uuVSQd1mGZyJ9I9hVMHqfq6xzyoZH8c",
-            authDomain: "my-ibstylings.firebaseapp.com",
-            projectId: "my-ibstylings",
-            storageBucket: "my-ibstylings.firebasestorage.app",
-            messagingSenderId: "462689044764",
-            appId: "1:462689044764:web:275fdb81d890948c6112d9",
-            measurementId: "G-5K0BLV6HEH"
-        };
+    <section id="services" class="py-24 px-6 max-w-7xl mx-auto">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-luxury tracking-widest text-white">Our Specialties</h2>
+            <p class="text-gold font-script text-base mt-2">Crafted and curated for individuals of distinction</p>
+            <div class="w-16 h-[1px] bg-gold mx-auto mt-4"></div>
+        </div>
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <a href="barbing.html" class="group relative block bg-stone-950 border border-stone-900 overflow-hidden hover:border-gold transition duration-300">
+                <div class="h-80 overflow-hidden relative">
+                    <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&q=80&w=600" alt="Barbing & Hair" class="w-full h-full object-cover transition duration-500 group-hover:scale-105 opacity-80 group-hover:opacity-100">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+                </div>
+                <div class="p-6 text-center">
+                    <h3 class="font-luxury text-lg text-white tracking-widest group-hover:text-gold transition duration-300">HAIR & BARBING</h3>
+                    <p class="text-stone-500 text-xs mt-1">Sharp cuts and flawless designs</p>
+                </div>
+            </a>
 
-        // Wrapped in a try/catch to prevent errors from crashing the page
-        async function loadHeroImage() {
-            try {
-                const docRef = doc(db, "Settings", "hero");
-                const docSnap = await getDoc(docRef);
-                if (docSnap.exists() && docSnap.data().image) {
-                    const heroBg = document.getElementById('hero-bg');
-                    if (heroBg) {
-                        heroBg.style.backgroundImage = `url('${docSnap.data().image}')`;
-                    }
+            <a href="nails.html" class="group relative block bg-stone-950 border border-stone-900 overflow-hidden hover:border-gold transition duration-300">
+                <div class="h-80 overflow-hidden relative">
+                    <img src="https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&q=80&w=600" alt="Nails" class="w-full h-full object-cover transition duration-500 group-hover:scale-105 opacity-80 group-hover:opacity-100">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+                </div>
+                <div class="p-6 text-center">
+                    <h3 class="font-luxury text-lg text-white tracking-widest group-hover:text-gold transition duration-300">NAIL ARTISTRY</h3>
+                    <p class="text-stone-500 text-xs mt-1">Premium manicures & extensions</p>
+                </div>
+            </a>
+
+            <a href="lashes.html" class="group relative block bg-stone-950 border border-stone-900 overflow-hidden hover:border-gold transition duration-300">
+                <div class="h-80 overflow-hidden relative">
+                    <img src="https://images.unsplash.com/photo-1583001931096-959e9a1a6223?auto=format&fit=crop&q=80&w=600" alt="Lashes" class="w-full h-full object-cover transition duration-500 group-hover:scale-105 opacity-80 group-hover:opacity-100">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+                </div>
+                <div class="p-6 text-center">
+                    <h3 class="font-luxury text-lg text-white tracking-widest group-hover:text-gold transition duration-300">LASH EXTENSIONS</h3>
+                    <p class="text-stone-500 text-xs mt-1">Stunning lashes tailored to you</p>
+                </div>
+            </a>
+
+            <a href="tattoos.html" class="group relative block bg-stone-950 border border-stone-900 overflow-hidden hover:border-gold transition duration-300">
+                <div class="h-80 overflow-hidden relative">
+                    <img src="https://images.unsplash.com/photo-1590156546746-c2330dd3327c?auto=format&fit=crop&q=80&w=600" alt="Tattoos" class="w-full h-full object-cover transition duration-500 group-hover:scale-105 opacity-80 group-hover:opacity-100">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+                </div>
+                <div class="p-6 text-center">
+                    <h3 class="font-luxury text-lg text-white tracking-widest group-hover:text-gold transition duration-300">INK & TATTOOS</h3>
+                    <p class="text-stone-500 text-xs mt-1">Safe, creative, & bold body art</p>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <section id="booking" class="bg-stone-950 border-y border-stone-900 py-24 px-6">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-3xl font-luxury tracking-widest text-white mb-4">Book Your Session</h2>
+            <p class="text-stone-400 text-sm max-w-lg mx-auto mb-10 leading-relaxed">
+                Step into the luxury environment you deserve. Contact us directly to reserve your time with our master artists.
+            </p>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-lg mx-auto">
+                <a href="tel:+2349132643824" class="flex items-center justify-center gap-3 bg-stone-900 hover:bg-stone-850 border border-stone-800 hover:border-gold p-5 transition duration-300 group">
+                    <i class="fa-solid fa-phone text-gold group-hover:scale-110 transition duration-300"></i>
+                    <span class="text-xs uppercase tracking-widest font-bold">Call to Book</span>
+                </a>
+                <a href="https://wa.me/2349132643824" target="_blank" class="flex items-center justify-center gap-3 bg-stone-900 hover:bg-stone-850 border border-stone-800 hover:border-gold p-5 transition duration-300 group">
+                    <i class="fa-brands fa-whatsapp text-emerald-500 group-hover:scale-110 transition duration-300"></i>
+                    <span class="text-xs uppercase tracking-widest font-bold">WhatsApp Us</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-12 bg-black text-center text-stone-600 text-xs border-t border-stone-950">
+        <div class="max-w-xs mx-auto mb-4 flex justify-center gap-6">
+            <a href="https://instagram.com" class="hover:text-gold transition"><i class="fa-brands fa-instagram text-lg"></i></a>
+            <a href="https://facebook.com" class="hover:text-gold transition"><i class="fa-brands fa-facebook text-lg"></i></a>
+            <a href="https://twitter.com" class="hover:text-gold transition"><i class="fa-brands fa-twitter text-lg"></i></a>
+        </div>
+        <p class="font-luxury tracking-widest text-stone-500 mb-2">I.B STYLINGS</p>
+        <p>&copy; 2026 I.B Stylings. All rights reserved.</p>
+    </footer>
+
+    <script>
+        if (window.netlifyIdentity) {
+            window.netlifyIdentity.on("init", user => {
+                if (!user) {
+                    window.netlifyIdentity.on("login", () => {
+                        document.location.href = "/admin/";
+                    });
                 }
-            } catch (e) {
-                console.log("Hero image not loaded (this is fine):", e);
-            }
+            });
         }
-        loadHeroImage();
     </script>
 </body>
 </html>
