@@ -84,27 +84,7 @@ Login
 <script>
 
 async function login() {
-
-const email = document.getElementById("email").value.trim();
-const password = document.getElementById("password").value;
-
-if (!email || !password) {
-    alert("Please enter your email and password.");
-    return;
-}
-
-const { error } = await supabase.auth.signInWithPassword({
-    email,
-    password
-});
-
-if (error) {
-    alert(error.message);
-    return;
-}
-
-window.location.href = "dashboard.html";
-
+    alert("Login button is working");
 }
 
 </script>
