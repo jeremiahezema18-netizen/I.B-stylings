@@ -90,10 +90,24 @@ async function login() {
 
     alert("Trying to log in...");
 
+    try {
+
     const { data, error } = await supabase.auth.signInWithPassword({
-        email: email,
-        password: password
+        email,
+        password
     });
+
+    if (error) {
+        alert(error.message);
+        return;
+    }
+
+    alert("Login successful!");
+    window.location.href = "dashboard.html";
+
+} catch (err) {
+    alert("ERROR: " + err.message);
+    }
 
     if (error) {
         alert(error.message);
