@@ -1,80 +1,139 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tattoos & Piercings Menu | I.B. Stylings</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@300;400;600&family=Playfair+Display:ital,wght@1,400;1,600&display=swap" rel="stylesheet">
 
-<title>Tattoos | I.B Stylings</title>
-
-<script src="https://cdn.tailwindcss.com"></script>
-
-<style>
-body{
-background:#0a0a0a;
-color:white;
-font-family:Arial,sans-serif;
-}
-
-.gold{
-color:#d4af37;
-}
-
-.card{
-background:#161616;
-border:1px solid #333;
-border-radius:15px;
-padding:40px;
-text-align:center;
-margin-top:40px;
-}
-
-.btn{
-background:#d4af37;
-color:black;
-padding:12px 25px;
-border-radius:8px;
-display:inline-block;
-margin-top:20px;
-text-decoration:none;
-font-weight:bold;
-}
-</style>
-
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #0a0a0a;
+            color: #ffffff;
+        }
+        .font-luxury {
+            font-family: 'Cinzel', serif;
+        }
+        .font-script {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+        }
+        .text-gold {
+            color: #d4af37;
+        }
+        .border-gold {
+            border-color: #d4af37;
+        }
+        .gold-btn {
+            background: linear-gradient(135deg, #b38728, #daaf38, #aa771c);
+            transition: all 0.3s ease;
+        }
+        .gold-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(218, 175, 56, 0.4);
+        }
+    </style>
 </head>
-
 <body>
 
-<header class="text-center py-10">
+    <nav class="border-b border-stone-900 bg-black py-4 px-6 flex justify-between items-center">
+        <a href="index.html" class="text-xs tracking-widest text-stone-400 uppercase flex items-center gap-2">
+            <i class="fa-solid fa-arrow-left"></i> Back to Home
+        </a>
+        <span class="font-luxury tracking-widest text-gold font-bold">I.B STYLINGS</span>
+    </nav>
 
-<h1 class="text-5xl gold font-bold">
-I.B Stylings
-</h1>
+    <header class="py-12 text-center max-w-xl mx-auto px-4">
+        <h1 class="text-4xl md:text-5xl font-luxury tracking-wider text-white">Ink & Piercings</h1>
+        <p class="text-gold font-script text-base mt-2">Professional, safe, and custom body art</p>
+        <div class="w-20 h-[1px] bg-gold mx-auto mt-4"></div>
+    </header>
 
-<h2 class="text-3xl mt-4">
-Tattoos
-</h2>
+    <main class="max-w-6xl mx-auto px-4 pb-24">
+        <div id="services-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div id="loading" class="col-span-full text-center py-12 text-stone-500">
+                <i class="fa-solid fa-circle-notch fa-spin text-gold text-2xl mb-2"></i>
+                <p class="text-sm uppercase tracking-wider">Loading portfolio options...</p>
+            </div>
+        </div>
+    </main>
 
-</header>
+    <script>
+        async function loadTattooServices() {
+            const grid = document.getElementById('services-grid');
+            
+            try {
+                const response = await fetch('https://api.github.com/repos/jeremiahezema18-netizen/I.B-stylings/contents/data/services');
+                
+                if (!response.ok) {
+                    throw new Error("No services saved yet");
+                }
 
-<div class="max-w-3xl mx-auto px-5">
+                const files = await response.json();
+                let servicesHTML = '';
+                let hasTattoos = false;
 
-<div class="card">
+                for (let file of files) {
+                    if (file.name.endsWith('.json') || file.name.endsWith('.md')) {
+                        const res = await fetch(file.download_url);
+                        const data = await res.json();
 
-<h3 class="text-2xl gold">
-No Services Yet
-</h3>
+                        // Filter to show ONLY tattoos/piercings on this page
+                        if (data.category === 'tattoos') {
+                            hasTattoos = true;
+                            servicesHTML += `
+                                <div class="bg-stone-950 border border-stone-900 rounded-none overflow-hidden hover:border-gold transition duration-300">
+                                    <div class="h-64 overflow-hidden relative bg-stone-900">
+                                        <img src="${data.image || 'https://images.unsplash.com/photo-1590156546746-c2330dd3327c?auto=format&fit=crop&q=80&w=600'}" 
+                                             alt="${data.title}" 
+                                             class="w-full h-full object-cover transition duration-500 hover:scale-105">
+                                    </div>
+                                    <div class="p-6">
+                                        <div class="flex justify-between items-baseline mb-2">
+                                            <h3 class="font-luxury text-lg text-white tracking-wider">${data.title}</h3>
+                                            <span class="text-gold font-bold font-mono">${data.price}</span>
+                                        </div>
+                                        <p class="text-stone-400 text-xs leading-relaxed mb-6">${data.body || 'Custom design consultation included.'}</p>
+                                        <a href="index.html#booking" class="block text-center gold-btn text-black font-bold uppercase tracking-wider py-2.5 text-xs">
+                                            Book Ink / Piercing
+                                        </a>
+                                    </div>
+                                </div>
+                            `;
+                        }
+                    }
+                }
 
-<p class="mt-4 text-gray-300">
-Services added from your Admin Dashboard will appear here.
-</p>
+                if (hasTattoos) {
+                    grid.innerHTML = servicesHTML;
+                } else {
+                    grid.innerHTML = `
+                        <div class="col-span-full text-center py-12 text-stone-500">
+                            <i class="fa-solid fa-pen-nib text-stone-700 text-4xl mb-3"></i>
+                            <p class="text-sm uppercase tracking-wider">No design options listed yet.</p>
+                            <p class="text-xs text-stone-600 mt-1">Log into /admin to upload your first ink service!</p>
+                        </div>
+                    `;
+                }
 
-<a href="index.html" class="btn">
-Back Home
-</a>
+            } catch (err) {
+                console.error("Error loading services:", err);
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-12 text-stone-500">
+                        <i class="fa-solid fa-pen-nib text-stone-700 text-4xl mb-3"></i>
+                        <p class="text-sm uppercase tracking-wider">No design options listed yet.</p>
+                        <p class="text-xs text-stone-600 mt-1">Log into your admin dashboard to upload your first ink service!</p>
+                    </div>
+                `;
+            }
+        }
 
-</div>
-
-</div>
-
+        loadTattooServices();
+    </script>
 </body>
 </html>
