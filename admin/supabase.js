@@ -1,13 +1,10 @@
-// ===============================
-// I.B. Stylings - Supabase Config
-// ===============================
+const supabaseUrl = "https://eravuxirymuooojyngjz.supabase.co";
 
-const SUPABASE_URL = "https://eravuxirymuooojyngjz.supabase.co";
-
-const SUPABASE_KEY =
-"sb_publishable_ZRFXaRtBDsXe9WY4iDDfUg_erIKsJDq";
+const supabaseKey = "sb_publishable_ZRFXaRtBDsXe9WY4iDDfUg_erIKsJDq";
 
 const supabase = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
+  supabaseUrl,
+  supabaseKey
 );
+
+window.supabaseClient = supabase;
