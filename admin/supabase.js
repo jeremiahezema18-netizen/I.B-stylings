@@ -2,12 +2,12 @@
 supabaseUrl = "https://eravuxirymuooojyngjz.supabase.co";
 supabaseKey = "sb_publishable_ZRFXaRtBDsXe9WY4iDDfUg_erIKsJDq";
 
-// We use 'supabaseClient' here to avoid clashing with the CDN namespace!
-supabaseClient = supabase.createClient(
-  supabaseUrl,
-  supabaseKey
-);
+// Initialize the client
+const client = supabase.createClient(supabaseUrl, supabaseKey);
 
-window.supabaseClient = supabaseClient;
+// Bind it globally to every possible name the pages might look for
+window.supabase = client;
+window.supabaseClient = client;
+supabaseClient = client;
 
-alert("Supabase.js loaded successfully");
+console.log("Supabase Client initialized globally successfully.");
