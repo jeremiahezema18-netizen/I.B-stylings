@@ -1,8 +1,7 @@
 backend:
-  name: github
-  repo: jeremiahezema18-netizen/I.B-stylings
+  name: git-gateway
   branch: main
-  base_url: https://decap-oauth-provider.vercel.app
+
 
 
 
