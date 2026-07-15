@@ -79,73 +79,35 @@ Login
 
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script>
-
-const supabaseUrl = "https://eravuxirymuooojyngjz.supabase.co";
-
-const supabaseKey = "YOUR_SUPABASE_ANON_KEY";
-
-const supabase = window.supabase.createClient(
-  supabaseUrl,
-  supabaseKey
-);
-<script>
-
-async function login(){
-
-const email=document.getElementById("email").value;
-
-const password=document.getElementById("password").value;
-
-const {data,error}=await supabase.auth.signInWithPassword({
-
-email,
-
-password
-
-});
-
-if(error){
-
-alert(error.message);
-
-}else{
-
-window.location.href="dashboard.html";
-
-}
-
-}
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase.js"></script>
 
 <script>
 
-async function login(){
+async function login() {
 
-const email=document.getElementById("email").value.trim();
+const email = document.getElementById("email").value.trim();
+const password = document.getElementById("password").value;
 
-const password=document.getElementById("password").value;
-
-if(!email || !password){
-alert("Please enter your email and password.");
-return;
+if (!email || !password) {
+    alert("Please enter your email and password.");
+    return;
 }
 
 const { error } = await supabase.auth.signInWithPassword({
-email,
-password
+    email,
+    password
 });
 
-if(error){
-alert(error.message);
-return;
+if (error) {
+    alert(error.message);
+    return;
 }
 
-window.location.href="dashboard.html";
+window.location.href = "dashboard.html";
 
 }
 
 </script>
+
+</body>
+</html>
