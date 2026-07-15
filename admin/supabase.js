@@ -1,13 +1,6 @@
 // supabase.js
-supabaseUrl = "https://eravuxirymuooojyngjz.supabase.co";
-supabaseKey = "sb_publishable_ZRFXaRtBDsXe9WY4iDDfUg_erIKsJDq";
+// This simply registers your keys globally so any page can grab them safely.
+window.SUPABASE_URL = "https://eravuxirymuooojyngjz.supabase.co";
+window.SUPABASE_KEY = "sb_publishable_ZRFXaRtBDsXe9WY4iDDfUg_erIKsJDq";
 
-// Initialize the client
-const client = supabase.createClient(supabaseUrl, supabaseKey);
-
-// Bind it globally to every possible name the pages might look for
-window.supabase = client;
-window.supabaseClient = client;
-supabaseClient = client;
-
-console.log("Supabase Client initialized globally successfully.");
+console.log("Supabase credentials loaded.");
