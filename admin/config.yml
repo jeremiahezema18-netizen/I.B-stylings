@@ -1,0 +1,40 @@
+backend:
+  name: github
+  repo: jeremiahezema18-netizen/I.B-stylings
+  branch: main
+
+media_folder: "images/uploads"
+public_folder: "/images/uploads"
+
+collections:
+  # ----------------------------------------------------------------
+  # 1. HOMEPAGE EDITOR (For editing home banner, photos & texts)
+  # ----------------------------------------------------------------
+  - name: "pages"
+    label: "Pages"
+    files:
+      - label: "Homepage"
+        name: "homepage"
+        file: "data/homepage.json"
+        fields:
+          - { label: "Main Brand Title", name: "brandTitle", widget: "string", default: "I.B. Stylings" }
+          - { label: "Slogan Line 1", name: "slogan1", widget: "string", default: "Unisex • Professional • Premium" }
+          - { label: "Slogan Line 2", name: "slogan2", widget: "string", default: "More than a look, It's a Lifestyle." }
+          - { label: "Hero Banner Image", name: "heroImage", widget: "image" }
+          - { label: "Instagram Handle", name: "instagram", widget: "string", default: "@I.B_STYLINGS" }
+          - { label: "Contact Phone Number", name: "phone", widget: "string", default: "2349120280362" }
+
+  # ----------------------------------------------------------------
+  # 2. SERVICES LIST (For adding/editing hair, lash, nail items)
+  # ----------------------------------------------------------------
+  - name: "services"
+    label: "Services"
+    folder: "data/services"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Service Name", name: "title", widget: "string" }
+      - { label: "Category", name: "category", widget: "select", options: ["barbing", "lashes", "nails", "tattoos"] }
+      - { label: "Price", name: "price", widget: "string" }
+      - { label: "Service Image", name: "image", widget: "image" }
+      - { label: "Description", name: "body", widget: "markdown", required: false }
