@@ -78,7 +78,18 @@ Login
 </button>
 
 </div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+<script>
+
+const supabaseUrl = "https://eravuxirymuooojyngjz.supabase.co";
+
+const supabaseKey = "YOUR_SUPABASE_ANON_KEY";
+
+const supabase = window.supabase.createClient(
+  supabaseUrl,
+  supabaseKey
+);
 <script>
 
 async function login(){
