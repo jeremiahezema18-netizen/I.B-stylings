@@ -1,10 +1,7 @@
-// supabase.js
+// admin/supabase.js
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
-// 1. Your Supabase Credentials
-const supabaseUrl = "https://eravuxirymuooojyngjz.supabase.co";
-const supabaseKey = "sb_publishable_ZRFXaRtBDsXe9WY4iDDfUg_erIKsJDq";
+const supabaseUrl = 'https://eravuxirymuooojyngjz.supabase.co';
+const supabaseKey = 'sb_publishable_ZRFXaRtBDsXe9WY4iDDfUg_erIKsJDq'; // Your Anon key
 
-// 2. Safely initialize and attach the client globally under a unique name
-window.supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
-
-console.log("Supabase client initialized successfully!");
+export const supabase = createClient(supabaseUrl, supabaseKey);
