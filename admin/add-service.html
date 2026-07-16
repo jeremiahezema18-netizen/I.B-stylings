@@ -1,192 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title id="pageTitle">I.B Stylings - Service Management</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="../supabase.js"></script>
+    <meta charset="UTF-8">
+    <title>Add New Service</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100">
-  <div class="flex">
-    <div class="w-64 h-screen bg-black text-white fixed">
-      <div class="p-6">
-        <h1 class="text-2xl font-bold text-yellow-400">I.B Stylings</h1>
-        <p class="text-gray-400 text-sm mt-1">Admin Dashboard</p>
-      </div>
-      <nav class="mt-8">
-        <a href="dashboard.html" class="block px-6 py-4 hover:bg-gray-900">🏠 Dashboard</a>
-        <a href="services.html" class="block px-6 py-4 hover:bg-gray-900">✂ Services</a>
-        <a href="add-service.html" class="block px-6 py-4 bg-gray-900">➕ Add Service</a>
-        <a href="bookings.html" class="block px-6 py-4 hover:bg-gray-900">📅 Bookings</a>
-        <a href="#" onclick="logout()" class="block px-6 py-4 text-red-400 hover:bg-red-900">🚪 Logout</a>
-      </nav>
-    </div>
-
-    <div class="ml-64 flex-1 p-10">
-      <h2 id="formHeading" class="text-4xl font-bold">Add New Service</h2>
-      <p id="formSubheading" class="text-gray-600 mt-2">Create a new hair, lash, or nail styling service.</p>
-
-      <div class="bg-white rounded-xl shadow-lg mt-10 p-8 max-w-2xl">
-        <form id="serviceForm" class="space-y-6">
-          <div>
-            <label class="block text-gray-700 font-semibold mb-2">Service Name</label>
-            <input type="text" id="serviceName" required placeholder="e.g., Luxury Box Braids" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400">
-          </div>
-
-          <div>
-            <label class="block text-gray-700 font-semibold mb-2">Category</label>
-            <select id="serviceCategory" required class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400">
-              <option value="Hair">Hair Styling</option>
-              <option value="Nails">Nails</option>
-              <option value="Lashes">Lashes / Eyes</option>
-              <option value="Male Cutz">Male Cutz</option>
-            </select>
-          </div>
-
-          <div>
-            <label class="block text-gray-700 font-semibold mb-2">Price (₦)</label>
-            <input type="number" id="servicePrice" required placeholder="e.g., 15000" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400">
-          </div>
-
-          <div id="currentImageContainer" class="hidden">
-            <label class="block text-gray-700 font-semibold mb-2">Current Image</label>
-            <img id="imagePreview" src="" alt="Service Preview" class="w-32 h-32 object-cover rounded-lg border mb-2">
-          </div>
-
-          <div>
-            <label id="imageLabel" class="block text-gray-700 font-semibold mb-2">Service Image</label>
-            <input type="file" id="serviceImage" accept="image/*" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400">
-          </div>
-
-          <button type="submit" id="submitBtn" class="w-full bg-yellow-400 text-black font-bold py-3 rounded-lg hover:bg-yellow-500 transition">
-            Save Service
-          </button>
+<body class="bg-black text-white p-10">
+    <div class="max-w-md mx-auto bg-stone-900 p-8 border border-stone-800">
+        <h2 class="text-2xl mb-6 text-gold">Add New Service</h2>
+        <form id="service-form" class="space-y-4">
+            <input type="text" id="title" placeholder="Title (e.g. NAIL ARTISTRY)" class="w-full p-2 bg-black border border-stone-700" required>
+            <input type="text" id="category" placeholder="Category (e.g. nails)" class="w-full p-2 bg-black border border-stone-700" required>
+            <input type="text" id="description" placeholder="Description" class="w-full p-2 bg-black border border-stone-700" required>
+            <input type="text" id="image_url" placeholder="Image URL" class="w-full p-2 bg-black border border-stone-700" required>
+            <button type="submit" class="w-full bg-gold text-black font-bold py-2">SAVE SERVICE</button>
         </form>
-      </div>
     </div>
-  </div>
 
-  <script>
-    // Safe Client Initialization right on the page itself
-    const dbUrl = window.SUPABASE_URL || "https://eravuxirymuooojyngjz.supabase.co";
-    const dbKey = window.SUPABASE_KEY || "sb_publishable_ZRFXaRtBDsXe9WY4iDDfUg_erIKsJDq";
-    
-    // Using supabase.createClient cleanly
-    const localClient = supabase.createClient(dbUrl, dbKey);
+    <script type="module">
+        import { supabase } from './supabase.js';
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const serviceId = urlParams.get('id');
-    const isEditMode = !!serviceId;
+        document.getElementById('service-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const service = {
+                title: document.getElementById('title').value,
+                category: document.getElementById('category').value,
+                description: document.getElementById('description').value,
+                image_url: document.getElementById('image_url').value
+            };
 
-    let existingImageUrl = null;
+            const { data, error } = await supabase.from('services').insert([service]);
 
-    async function checkAuth() {
-      const { data: { session } } = await localClient.auth.getSession();
-      if (!session) {
-        window.location.href = "index.html";
-      }
-    }
-
-    async function initPage() {
-      await checkAuth();
-
-      if (isEditMode) {
-        document.getElementById('pageTitle').textContent = "I.B Stylings - Edit Service";
-        document.getElementById('formHeading').textContent = "Edit Service";
-        document.getElementById('formSubheading').textContent = "Modify the details of your service.";
-        document.getElementById('imageLabel').textContent = "Upload New Image (Replaces old one)";
-        document.getElementById('submitBtn').textContent = "Update Service";
-
-        try {
-          const { data: service, error } = await localClient
-            .from('services')
-            .select('*')
-            .eq('id', serviceId)
-            .single();
-
-          if (error) throw error;
-
-          document.getElementById('serviceName').value = service.name;
-          document.getElementById('serviceCategory').value = service.category;
-          document.getElementById('servicePrice').value = service.price;
-
-          if (service.image_url) {
-            existingImageUrl = service.image_url;
-            const imgPreview = document.getElementById('imagePreview');
-            imgPreview.src = service.image_url;
-            document.getElementById('currentImageContainer').classList.remove('hidden');
-          }
-        } catch (err) {
-          alert("Error loading service details: " + err.message);
-          window.location.href = "services.html";
-        }
-      }
-    }
-
-    document.getElementById('serviceForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      
-      const submitBtn = document.getElementById('submitBtn');
-      submitBtn.disabled = true;
-      submitBtn.textContent = isEditMode ? "Updating..." : "Saving...";
-
-      const name = document.getElementById('serviceName').value;
-      const category = document.getElementById('serviceCategory').value;
-      const price = parseFloat(document.getElementById('servicePrice').value);
-      const imageFile = document.getElementById('serviceImage').files[0];
-
-      let imageUrl = existingImageUrl;
-
-      try {
-        if (imageFile) {
-          const fileExt = imageFile.name.split('.').pop();
-          const fileName = `${Date.now()}.${fileExt}`;
-          const filePath = `services/${fileName}`;
-
-          const { error: uploadError } = await localClient.storage
-            .from('service-images')
-            .upload(filePath, imageFile);
-
-          if (uploadError) throw uploadError;
-
-          const { data } = localClient.storage.from('service-images').getPublicUrl(filePath);
-          imageUrl = data.publicUrl;
-        }
-
-        if (isEditMode) {
-          const { error } = await localClient
-            .from('services')
-            .update({ name, category, price, image_url: imageUrl })
-            .eq('id', serviceId);
-
-          if (error) throw error;
-          alert("Service updated successfully!");
-        } else {
-          const { error } = await localClient
-            .from('services')
-            .insert([{ name, category, price, image_url: imageUrl }]);
-
-          if (error) throw error;
-          alert("Service added successfully!");
-        }
-
-        window.location.href = "services.html";
-      } catch (err) {
-        alert("Error saving service: " + err.message);
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = isEditMode ? "Update Service" : "Save Service";
-      }
-    });
-
-    async function logout() {
-      await localClient.auth.signOut();
-      window.location.href = "index.html";
-    }
-
-    document.addEventListener("DOMContentLoaded", initPage);
-  </script>
+            if (error) alert("Error: " + error.message);
+            else {
+                alert("Service added successfully!");
+                location.reload();
+            }
+        });
+    </script>
 </body>
 </html>
